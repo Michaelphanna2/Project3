@@ -17,8 +17,8 @@
                                     <option value="" selected>-- Pick Destination --</option>
                                                     <optgroup label="Africa">
                                         
-                                                        <option value="Algeria Code">Algeria</option>
-                                                        <option value="https://www.travel-advisory.info/angola">Angola</option>
+                                                        <option value="iso_alpha2">Algeria</option>
+                                                        <option value="https://www.travel-advisory.info/api?countrycode=AO">Angola</option>
                                                         <option value="https://www.travel-advisory.info/benin">Benin</option>
                                                         <option value="https://www.travel-advisory.info/botswana">Botswana</option>
                                                         <option value="https://www.travel-advisory.info/burkina-faso">Burkina Faso</option>
@@ -82,16 +82,15 @@
             <!-- View Travel Advisory -->
             <div class=col-md-6>
 
-                    <input type="submit" class="btn btn-default" value="Open country advisory" id="country_submit" onclick="">
+                    <input type="submit" class="btn btn-default" value="Go" id="country_submit" onclick="">
                 
                 </div>
-                <div id="searchCountry">
+                <!-- Search Country -->
+                <div id="country-div">
                     
                 </div>
 
-                <div id="country_search">
-
-                </div>
+             
             </form>
 
             
@@ -103,7 +102,7 @@
   function searchCountry() {
 
     // Querying the bandsintown api for the selected artist, the ?app_id parameter is required, but can equal anything
-    var queryURL = "https://www.travel-advisory.info/api";
+    var queryURL = "https://www.travel-advisory.info/api?" + iso_alpha2;
     $.ajax({
       url: queryURL,
       method: "GET"
@@ -115,7 +114,7 @@
 
 
       // Constructing HTML containing the artist information
-      var countryCode = $("<p>").text(data.iso_alpha);
+      var countryCode = $("<p>").text(data.iso_alpha2);
       var name = $("<h2>").text(data.name);
       var continent = $("<h2>").text(data.continent);
       var advisory = [
@@ -130,6 +129,8 @@
       $("#country-div").empty();
       $("#country-div").append(countryCode, name, continent, advisory);
     }
+
+
   
 
   // Event handler for user clicking the select-artist button
@@ -138,17 +139,17 @@
     event.preventDefault();
     // Storing the artist name
     var selectCountry = $("#country_search").val().trim();
+    console.log(selectCountry);
 
     // Running the searchBandsInTown function(passing in the artist as an argument)
     searchCountry(selectCountry);
   });
     
 
-    searchCountry();
 </script>
 
 <script>
-        var goBtn = document.getElementById("country_submit");
+        var goBtn = document.getElementById("country_search");
         var menu = document.getElementById("country_search");
         
         goBtn.onclick = function() {
@@ -157,8 +158,6 @@
         
         </script>
     
-    <div id="country-div">
 
-    </div>
 </body>
 </html>
