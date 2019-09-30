@@ -1,46 +1,105 @@
-// Dependencies
-var express = require("express");
-var mongodb = require("mongodb");
-// Require axios and cheerio. This makes the scraping possible
-var axios = require("axios");
-var cheerio = require("cheerio");
+const axios = require('axios');
 
-var app = express();
+axios.get('https://www.travel-advisory.info/api')
+  .then(response => {
+    // console.log(response.data);
+    console.log(response.data)
 
-// A GET route for scraping the echoJS website
-app.get("/travel", function(req, res) {
-    // First, we grab the body of the html with axios
-    axios.get("https://www.travel-advisory.info/api/").then(function(response) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
-      var $ = cheerio.load(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+
+    // // var $ = cheerio.load(res.data);
+
+    // // var countries = [];
+
+    // // $(".searchCountry").each(function(i, element){
+
+    // // // function countrySearch () {
+    // //   // Constructing HTML containing the country information
+    // //   var countryCode = $("<p>").text(data.iso_alpha2);
+    // //   var name = $("<h2>").text(data.name);
+    // //   var continent = $("<h2>").text(data.continent);
+    // //   var advisory = [
+    // //       score = data.score,
+    // //       sources_active = data.sources_active,
+    // //       message = data.message,
+    // //       updated = data.updated,
+    // //       source = data.source
+    // //     ]
+
+
+    // //   // Empty the contents of the artist-div, append the new artist content
+    // //   $("#country-div").empty();
+    // //   $("#country-div").append(countryCode, name, continent, advisory);
+    // })
   
-      // Now, we grab every h2 within an article tag, and do the following:
-      $("iso_alpha2").each(function(i, element) {
-        // Save an empty result object
-        var result = {};
-  
-        // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(this)
-          .children("a")
-          .text();
-        result.link = $(this)
-          .children("a")
-          .attr("href");
-  
-        // Create a new Article using the `result` object built from scraping
-        db.Countries.create(result)
-          .then(function(dbCountries) {
-            // View the added result in the console
-            console.log(dbCountries);
-          })
-          .catch(function(err) {
-            // If an error occurred, log it
-            console.log(err);
-          });
-      })
+  });
+
+
+
+
+
+
+// function searchCountries(country) {
+
+//     axios.get('https://www.travel-advisory.info/api')
+//     .then(function (response) {
+//         // handle success
+//         console.log(response);
+//       })
+//       .catch(function (error) {
+//         // handle error
+//         console.log(error);
+//       })
+//       .finally(function () {
+//         // always executed
+//       });
+
+
+//  // Event handler for user clicking the select-artist button
+//   $(".go").on("click", function(event) {
+//     // Preventing the button from trying to submit the form
+//     event.preventDefault();
+
+//     // Running the searchBandsInTown function(passing in the artist as an argument)
+//     searchCountries();
+//   });
+//   console.log(response);
+// }
+    // Querying the bandsintown api for the selected artist, the ?app_id parameter is required, but can equal anything
+    // var queryURL = "https://www.travel-advisory.info/api";
+    // $.ajax({
+    //   url: queryURL,
+    //   method: "GET"
+    // }).then(function(response) {
+
+      // Printing the entire object to console
       
-    })
-});
-    
 
-    
+//     })
+// }
+
+// const getCountries = () => {
+//   try {
+//     return axios.get('https://www.travel-advisory.info/api')
+//   } catch (error) {
+//     console.error(error)
+//   }
+// }
+
+// const countCountries = async () => {
+//   const countries = getCountries()
+//     .then(response => {
+//       if (response.data.message) {
+//         console.log(
+//           `Got ${Object.entries(response.data.message).length} countries`
+//         )
+//       }
+//     })
+//     .catch(error => {
+//       console.log(error)
+//     })
+// }
+
+// countCountries();
