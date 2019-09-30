@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Populate Exercise</title>
+    <style>
+      input {
+        display: block;
+        height: 36px;
+        width: 200px;
+        font-size: 24px;
+      }
+      textarea {
+        width: 200px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="/submit" method="post">
+    <h1>Hi Traveler!</h1>
+    <h2>Enter a Destination!</h2>
+      <input type="text" name="Trip" placeholder="Destination">
+      <textarea type="text" name="Expense" placeholder="Write Expense Here"></textarea>
+
+      <input type="submit">
+      <a href="/trips">See your trips!</a>
+      <a href="/expenses">See your expenses!</a>
+      <a href="/populatedTrip">See your trips, populated with expenses!</a>
+    </form>
+  </body>
+</html>

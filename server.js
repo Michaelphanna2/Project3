@@ -1,74 +1,105 @@
-const express = require('express')
-const mongo = require('mongodb').MongoClient
-const url = 'mongodb://localhost:27017'
+var express = require("express");
+var logger = require("morgan");
+var mongoose = require("mongoose");
 
-const app = express()
-app.use(express.json())
+var PORT = 3000;
 
-let db, trips, expenses
+// Require all models
+var db = require("./models");
 
-mongo.connect(
-  url,
-  (err, client) => {
-    if (err) {
-      console.error(err)
-      return
-    }
-    db = client.db('tripcost')
-    trips = db.collection('trips')
-    expenses = db.collection('expenses')
-  }
-)
+// Initialize Express
+var app = express();
 
-app.post('/trip', (req, res) => {
-  const name = req.body.name
-  trips.insertOne({ name: name }, (err, result) => {
-    if (err) {
-      console.error(err)
-      res.status(500).json({ err: err })
-      return
-    }
-    res.status(200).json({ ok: true })
+// Configure middleware
+
+// Use morgan logger for logging requests
+app.use(logger("dev"));
+// Parse request body as JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+// Make public a static folder
+app.use(express.static("public"));
+
+// Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/populatedb", { useNewUrlParser: true });
+
+// When the server starts, create and save a new Trip document to the db
+// The "unique" rule in the Trip model's schema will prevent duplicate Trips from being added to the server
+db.Trip.create({ name: "Barcelona, Spain " })
+  .then(function(dbTrip) {
+    console.log(dbTrip);
   })
-})
+  .catch(function(err) {
+    console.log(err.message);
+  });
 
-app.get('/trips', (req, res) => {
-    trips.find().toArray((err, items) => {
-        if (err) {
-          console.error(err)
-          res.status(500).json({ err: err })
-          return
-        }
-        res.status(200).json({ trips: items })
-      })
-})
-app.post('/expense', (req, res) => {
-    expenses.insertOne(
-        {
-          trip: req.body.trip,
-          date: req.body.date,
-          amount: req.body.amount,
-          category: req.body.category,
-          description: req.body.description
-        },
-        (err, result) => {
-          if (err) {
-            console.error(err)
-            res.status(500).json({ err: err })
-            return
-          }
-          res.status(200).json({ ok: true })
-        })
-})
-app.get('/expenses', (req, res) => {
-    expenses.find({trip: req.body.trip}).toArray((err, items) => {
-        if (err) {
-          console.error(err)
-          res.status(500).json({ err: err })
-          return
-        }
-        res.status(200).json({ trips: items })
-      })
-})
+// Routes
 
-app.listen(3000, () => console.log('Server ready'))
+// Route for retrieving all Expenses from the db
+app.get("/Expenses", function(req, res) {
+  // Find all Expenses
+  db.Expense.find({})
+    .then(function(dbExpense) {
+      // If all Expenses are successfully found, send them back to the client
+      res.json(dbExpense);
+    })
+    .catch(function(err) {
+      // If an error occurs, send the error back to the client
+      res.json(err);
+    });
+});
+
+// Route for retrieving all Trips from the db
+app.get("/Trips", function(req, res) {
+  // Find all Trips
+  db.Trip.find({})
+    .then(function(dbTrip) {
+      // If all Trips are successfully found, send them back to the client
+      res.json(dbTrip);
+    })
+    .catch(function(err) {
+      // If an error occurs, send the error back to the client
+      res.json(err);
+    });
+});
+
+// Route for saving a new Expense to the db and associating it with a Trip
+app.post("/submit", function(req, res) {
+  // Create a new Expense in the db
+  db.Expense.create(req.body)
+    .then(function(dbExpense) {
+      // If a Expense was created successfully, find one Trip (there's only one) and push the new Expense's _id to the Trip's `Expenses` array
+      // { new: true } tells the query that we want it to return the updated Trip -- it returns the original by default
+      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+      return db.Expense.findOneAndUpdate({}, { $push: { Expenses: dbExpense._id } }, { new: true });
+    })
+    .then(function(dbTrip) {
+      // If the Trip was updated successfully, send it back to the client
+      res.json(dbTrip);
+    })
+    .catch(function(err) {
+      // If an error occurs, send it back to the client
+      res.json(err);
+    });
+});
+
+// Route to get all Trip's and populate them with their Expenses
+app.get("/populatedTrip", function(req, res) {
+  // Find all Trips
+  db.Trip.find({})
+    // Specify that we want to populate the retrieved Trips with any associated Expenses
+    .populate("trip")
+    .then(function(dbTrip) {
+      // If able to successfully find and associate all Trips and Expenses, send them back to the client
+      res.json(dbTrip);
+    })
+    .catch(function(err) {
+      // If an error occurs, send it back to the client
+      res.json(err);
+    });
+});
+
+// Start the server
+app.listen(PORT, function() {
+  console.log("App running on port " + PORT + "!");
+});
