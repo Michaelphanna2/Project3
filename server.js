@@ -71,7 +71,7 @@ app.post("/submit", function(req, res) {
       // If a Expense was created successfully, find one Trip (there's only one) and push the new Expense's _id to the Trip's `Expenses` array
       // { new: true } tells the query that we want it to return the updated Trip -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      return db.Expense.findOneAndUpdate({}, { $push: { Expenses: dbExpense._id } }, { new: true });
+      return db.Expense.findOneAndUpdate({$push:{trips: dbTrip._id}}, { $push: { Expenses: dbExpense._id } }, { new: true });
     })
     .then(function(dbTrip) {
       // If the Trip was updated successfully, send it back to the client
@@ -83,8 +83,28 @@ app.post("/submit", function(req, res) {
     });
 });
 
+app.post("/submit", function(req, res) {
+  // Create a new Expense in the db
+  db.Expense.create(req.body)
+    .then(function(dbExpense) {
+      // If a Expense was created successfully, find one Trip (there's only one) and push the new Expense's _id to the Trip's `Expenses` array
+      // { new: true } tells the query that we want it to return the updated Trip -- it returns the original by default
+      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+      return db.Trip.findOneAndUpdate({}, { $push: { Trip: dbTrip._id } }, { new: true });
+    })
+    .then(function(dbExpense) {
+      // If the Trip was updated successfully, send it back to the client
+      res.json(dbExpense);
+    })
+    .catch(function(err) {
+      // If an error occurs, send it back to the client
+      res.json(err);
+    });
+});
+
+
 // Route to get all Trip's and populate them with their Expenses
-app.get("/populatedTrip", function(req, res) {
+app.get("/Trip", function(req, res) {
   // Find all Trips
   db.Trip.find({})
     // Specify that we want to populate the retrieved Trips with any associated Expenses
