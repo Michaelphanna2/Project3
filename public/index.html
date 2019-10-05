@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Document</title>
+   
+
   <title>Happy Trails - Welcome!</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,20 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
-<body>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav navbar-right">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="#Password Generator">Password Generator</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
         <div class="jumbotron">
                 <h1 class="display-4">Happy Trails</h1>
@@ -23,20 +36,6 @@
                 <p>Where are you going?</p>
                 <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
               </div>
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-<nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-      <li id="test"><a href="#about">About Us</a></li>
-      <li><a href="#Login">Login</a></li>
-      <li><a href="#Password Generator">Password Generator</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 <br>
 
 <div class="jumbotron text-center">
@@ -45,12 +44,12 @@
   <div class="flyingIcon">
     <div class="box">
       <div class="plane">
-        <img src="images/airplane.png" alt="plane">
+        <img src="https://img.icons8.com/color/2x/airplane-mode-on.png" alt="plane">
       </div>
       <div class="cloud">
-        <img src="images/cloud.png" alt="cloud">
-        <img src="images/cloud.png" alt="cloud">
-        <img src="images/cloud.png" alt="cloud">
+        <img src="https://img.icons8.com/ultraviolet/2x/clouds.png" alt="cloud">
+        <img src="https://img.icons8.com/ultraviolet/2x/clouds.png" alt="cloud">
+        <img src="https://img.icons8.com/ultraviolet/2x/clouds.png" alt="cloud">
       </div>
     </div>
   </div>  
@@ -59,6 +58,52 @@
     <h1>Happy Trails</h1>
 <h2>Traveling made easy</h2>
 <p>Where are you going?</p>
+          
+
+<h1>Enter a trip into the database</h1>
+    <form action="/submit" method="post">
+      <input type="text" name="author" placeholder="Country">
+      <input type="text" name="title" placeholder="State">
+
+      <input type="submit">
+      <br>
+      <a href="/trips">See your Expenses!</a>
+      <br>
+      <a href="/expenses">See your Trips!</a>
+      <br>
+      <a href="/populatedTrips">See your Trips, populated with Expenses!</a>
+    </form>
+<hr/>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h5 class="card-title text-center">Sign In</h5>
+              <form class="form-signin">
+                <div class="form-label-group">
+                  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                  <label for="inputEmail">Email address</label>
+                </div>
+                <div class="form-label-group">
+                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                  <label for="inputPassword">Password</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="customCheck1">
+                  <label class="custom-control-label" for="customCheck1">Remember password</label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                <hr class="my-4">
+                <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button>
+                <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+
 <div id="about" class="container-fluid">
   <div class="row">
     <div class="col-sm-8">
@@ -66,7 +111,7 @@
 
    <br>
    <h4>Happy Trails is your first destination to begin planning before you arrive at your final destination!</h4><br>
-   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+   <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p> -->
    </div>
   </div>
 </div>
@@ -76,8 +121,9 @@
 <div id="services" class="container-fluid text-center">
 <h2>SERVICES</h2>
 <ul>
-  <li>Travel Advisories</li>
-  <li>Cost Estimators</li>
+  <li><h4><a href="https://travel.state.gov/content/travel/en/international-travel/before-you-go/about-our-new-products.html">Home</a></h4></li>
+  <li><h4><a href="https://travel.state.gov/content/travel.html">Travel Advisories</a></h4></li>
+  
 </ul>
 <br>
 </div>
